@@ -46,29 +46,38 @@
         .media-item { touch-action: manipulation; }
         .emoji-faller { position: fixed; top: -40px; left: 0; pointer-events: none; font-size: 1.6rem; opacity: 0.95; animation: emojiFall linear forwards; z-index: 2; text-shadow: 0 0 16px rgba(0,0,0,.2); }
         @keyframes emojiFall { to { transform: translate3d(var(--x,0), 120vh, 0) rotate(720deg); opacity: 0; } }
-        .media-menu-sheet { position: fixed; inset: auto 0 0 0; background: rgba(12,28,40,0.96); color:#f8fafc; transform: translateY(110%); transition: transform .32s ease; z-index: 120; display:flex; flex-direction:column; gap:16px; padding:18px; border-top-left-radius:22px; border-top-right-radius:22px; box-shadow:0 -18px 40px rgba(0,0,0,.45); font-family:inherit; }
+        .media-menu-sheet { position: fixed; inset: auto 0 0 0; background: rgba(12,28,40,0.98); color:#f8fafc; transform: translateY(110%); transition: transform .32s ease; z-index: 120; display:flex; flex-direction:column; gap:16px; padding:24px 18px; border-top-left-radius:22px; border-top-right-radius:22px; box-shadow:0 -18px 40px rgba(0,0,0,.45); font-family:inherit; max-height:70vh; overflow-y:auto; }
         .media-menu-sheet.open { transform: translateY(0); }
-        .media-menu-sheet .sheet-title { font-size:1.05em; font-weight:700; margin-bottom:2px; }
-        .media-menu-sheet .sheet-description { color: rgba(248,250,252,0.8); line-height:1.6; }
-        .sheet-actions { display:flex; flex-wrap:wrap; gap:12px; }
-        .sheet-btn { flex: 1 1 48%; padding: 14px 16px; border-radius:14px; border:none; cursor:pointer; font-weight:700; transition: transform .2s ease, background .2s ease; min-width:120px; }
-        .sheet-btn:hover { transform: translateY(-1px); }
-        .sheet-btn.primary { background:#16a34a; color:#fff; }
-        .sheet-btn.danger { background:#dc2626; color:#fff; }
-        .sheet-btn.secondary { background:rgba(255,255,255,.12); color:#fff; }
+        .media-menu-sheet .sheet-title { font-size:1.15em; font-weight:700; margin-bottom:4px; color:#fff; }
+        .media-menu-sheet .sheet-description { color: rgba(248,250,252,0.85); line-height:1.6; font-size:0.95em; }
+        .sheet-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:12px; }
+        .sheet-btn { flex: 1 1 48%; padding: 16px 18px; border-radius:14px; border:none; cursor:pointer; font-weight:700; transition: transform .2s ease, background .2s ease; min-width:120px; font-size:1em; }
+        .sheet-btn:active { transform: scale(0.98); }
+        .sheet-btn:hover { transform: translateY(-2px); }
+        .sheet-btn.primary { background:#22c55e; color:#fff; box-shadow: 0 4px 12px rgba(34,197,94,.3); }
+        .sheet-btn.primary:active { background:#16a34a; }
+        .sheet-btn.danger { background:#ef4444; color:#fff; box-shadow: 0 4px 12px rgba(239,68,68,.3); }
+        .sheet-btn.danger:active { background:#dc2626; }
+        .sheet-btn.secondary { background:rgba(255,255,255,.15); color:#fff; }
+        .sheet-btn.secondary:active { background:rgba(255,255,255,.25); }
         .sheet-btn.full { flex:1 1 100%; }
+        @media (max-width:600px) {
+            .media-menu-sheet { padding:20px 16px; gap:14px; }
+            .sheet-btn { padding: 14px 16px; font-size:0.95em; }
+        }
         .media-item img, .media-item video { width:100%; height:100%; object-fit:cover }
 
         .slot-controls { position:absolute; top:8px; right:8px; display:flex; gap:6px; z-index:5 }
         .btn-small { background: rgba(0,0,0,0.5); color:#fff; border:none; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:0.9em }
 
         /* Modal viewer */
-        .viewer { position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:100; flex-direction:column; }
-        .viewer.open { display:flex }
+        .viewer { position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:99; flex-direction:column; opacity:0; transition:opacity 0.3s ease; }
+        .viewer.open { display:flex; opacity:1; z-index:101; }
         .viewer-header { position:absolute; top:20px; right:20px; display:flex; gap:10px; z-index:10; }
-        .viewer-content { max-width:90vw; max-height:75vh; border-radius:12px; overflow:hidden; background:#000; box-shadow:0 30px 80px rgba(0,0,0,.8); position:relative; }
+        .viewer-content { max-width:90vw; max-height:75vh; border-radius:12px; overflow:hidden; background:#000; box-shadow:0 30px 80px rgba(0,0,0,.8); position:relative; animation: zoomIn 0.3s ease; }
+        @keyframes zoomIn { from { transform: scale(0.95); opacity:0; } to { transform: scale(1); opacity:1; } }
         .viewer-content img, .viewer-content video { display:block; max-width:100%; max-height:100%; }
-        .viewer-close { background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3); color:#fff; padding:10px 16px; border-radius:10px; cursor:pointer; font-weight:700; transition: all 0.3s; }
+        .viewer-close { background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4); color:#fff; padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:700; transition: all 0.3s; font-size:1.05em; }
         .viewer-close:hover { background:rgba(255,255,255,0.25); }
         .viewer-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.2); border:none; color:#fff; padding:16px 20px; cursor:pointer; font-size:1.8em; font-weight:700; transition: all 0.3s; border-radius:8px; z-index:10; }
         .viewer-nav:hover { background:rgba(255,255,255,0.35); }
@@ -98,8 +107,10 @@
         @media (max-width:600px) {
             .media-grid { grid-template-columns: 1fr; gap:12px; }
             .welcome-message { font-size: 1.4em; }
-            .viewer-nav { padding: 12px 14px; font-size: 1.4em; }
+            .viewer-nav { padding: 16px 18px; font-size: 1.8em; }
             .viewer-content { max-height: 65vh; }
+            .viewer-close { padding: 12px 18px; font-size: 1.1em; position: fixed; top: 16px; right: 16px; z-index: 102; }
+            .viewer-info { font-size: 0.9em; padding: 12px 16px; }
         }
     </style>
     </head>
@@ -114,7 +125,7 @@
     <!-- YouTube Presentation Section -->
     <section style="padding:40px 20px; background:rgba(0,0,0,0.02);">
         <div style="max-width:1200px; margin:0 auto;">
-            <h2 style="font-size:1.8em; font-weight:700; color:#124e59; margin-bottom:20px; text-align:center;">📺 Prezentare Video</h2>
+            <h2 style="font-size:1.8em; font-weight:700; color:#f5f5f5; text-shadow: 0 2px 8px rgba(18,78,89,0.6); margin-bottom:20px; text-align:center;">📺 Prezentare Video</h2>
             <div style="width:100%; max-width:900px; margin:0 auto; aspect-ratio:16/9; border-radius:16px; overflow:hidden; box-shadow:0 12px 32px rgba(0,0,0,0.15); border:1px solid rgba(18,78,89,0.12);">
                 <iframe src="https://www.youtube.com/embed/IzBCwgHL9gk" title="Proiect Energie Regenerabilă" style="width:100%; height:100%; border:none;" allowfullscreen></iframe>
             </div>
@@ -125,8 +136,8 @@
     <section style="position:relative; overflow:hidden; padding:40px 20px; text-align:center; background: linear-gradient(to bottom, rgba(16,229,16,0.1), rgba(255,255,255,0), rgba(135,206,235,0.1));">
         <div style="position:absolute; inset:0; opacity:0.15; background:radial-gradient(circle at top, rgba(74,222,128,1), transparent 50%);"></div>
         <div style="position:relative; z-index:10; max-width:90%; margin:0 auto;">
-            <h1 style="font-size:3.5em; font-weight:900; margin-bottom:24px; color:#163b54; text-shadow:0 2px 4px rgba(0,0,0,0.1);">Smart City</h1>
-            <p style="font-size:1.3em; max-width:1000px; margin:0 auto 30px; line-height:1.8; color:#264e5a;">
+            <h1 style="font-size:3.5em; font-weight:900; margin-bottom:24px; color:#f0f9ff; text-shadow:0 3px 12px rgba(18,78,89,0.7);">Smart City</h1>
+            <p style="font-size:1.3em; max-width:1000px; margin:0 auto 30px; line-height:1.8; color:#f5f5f5; text-shadow:0 2px 8px rgba(18,78,89,0.6);">
                 Un oraș modern care folosește energia verde pentru a proteja natura, a reduce poluarea și a crea un viitor mai curat pentru generațiile viitoare.
             </p>
             <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:40px;">
@@ -412,7 +423,18 @@
                     cell.appendChild(placeholder);
                 }
 
-                cell.addEventListener('click', (e) => { if (e.target.closest('.btn-small')) return; if (!slotItem) return; openMediaMenu(i); playClickSound(); });
+                cell.addEventListener('click', (e) => { 
+                    if (e.target.closest('.btn-small')) return; 
+                    if (!slotItem) return; 
+                    openMediaMenu(i); 
+                    playClickSound(); 
+                });
+                cell.addEventListener('dblclick', (e) => {
+                    if (e.target.closest('.btn-small')) return;
+                    if (!slotItem) return;
+                    openViewer(i);
+                    playClickSound();
+                });
                 addBtn.addEventListener('click', (e) => { e.stopPropagation(); selectedSlot = i; document.getElementById('fileInput').click(); playClickSound(); });
                 delBtn.addEventListener('click', (e) => { e.stopPropagation(); removeSlot(i); playClickSound(); });
                 grid.appendChild(cell);
@@ -427,8 +449,8 @@
             const item = slots[index];
             if (!item) return;
             activeMenuIndex = index;
-            document.getElementById('menuTitle').textContent = `Slot ${index + 1} - ${item.type.startsWith('image/') ? 'Imagine' : 'Video'}`;
-            document.getElementById('menuDescription').textContent = item.type.startsWith('image/') ? 'Apasă Vizualizează pentru fullscreen.' : 'Apasă Vizualizează pentru a reda clipul.';
+            document.getElementById('menuTitle').textContent = `📱 Slot ${index + 1} - ${item.type.startsWith('image/') ? 'Imagine' : 'Video'}`;
+            document.getElementById('menuDescription').textContent = '🖱️ Dublu-click = Fullscreen rapid  •  👁️ Apasă butonul = Vizualizare';
             mediaMenu.classList.add('open');
         }
 
@@ -436,6 +458,11 @@
             activeMenuIndex = null;
             mediaMenu.classList.remove('open');
         }
+
+        // Close menu when clicking outside
+        mediaMenu.addEventListener('click', (e) => {
+            if (e.target === mediaMenu) closeMediaMenu();
+        });
 
         document.getElementById('menuViewBtn').addEventListener('click', async () => {
             if (activeMenuIndex === null) return;
@@ -607,6 +634,19 @@
         document.getElementById('viewerClose').addEventListener('click', ()=>{ closeViewer(); playClickSound(); });
         document.getElementById('viewerPrev').addEventListener('click', async ()=>{ const slots = await loadSlots(); const filled = getFilledSlots(slots); currentViewingIndex = (currentViewingIndex - 1 + filled.length) % filled.length; await updateViewer(); playClickSound(); });
         document.getElementById('viewerNext').addEventListener('click', async ()=>{ const slots = await loadSlots(); const filled = getFilledSlots(slots); currentViewingIndex = (currentViewingIndex + 1) % filled.length; await updateViewer(); playClickSound(); });
+        
+        // Swipe to close on mobile
+        let touchStartY = 0;
+        document.getElementById('viewer').addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+        document.getElementById('viewer').addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            if (touchEndY - touchStartY > 100 && e.target.id === 'viewer') {
+                closeViewer();
+            }
+        });
+        
         document.getElementById('viewer').addEventListener('click', (e)=>{ if(e.target.id==='viewer') closeViewer(); });
 
         document.addEventListener('keydown', (e) => {
