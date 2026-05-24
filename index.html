@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proiect Liceul Elie Radu - Energia Regenerabilă</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #123a2b 0%, #1a5f3f 40%, #87ceeb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: #333;
+            padding: 0 12px;
+        }
+
+        /* Animated background */
+        .background-animation { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .wind-line { position: absolute; background: rgba(255,255,255,0.12); height: 2px; animation: windBlow linear infinite; }
+        @keyframes windBlow { from { transform: translateX(-40vw); opacity: .4 } to { transform: translateX(140vw); opacity: 0 } }
+        .leaf { position: absolute; font-size: 1.6em; animation: leafFall linear infinite; opacity: .85 }
+        @keyframes leafFall { from { transform: translateY(-5vh) rotate(0deg) } to { transform: translateY(110vh) rotate(360deg); opacity: 0 } }
+
+        header { position: relative; z-index: 10; text-align: center; padding: 40px 20px; background: linear-gradient(180deg, rgba(0,0,0,0.12), transparent); backdrop-filter: blur(4px); }
+        .welcome-message { color: #fff; font-size: 2.2em; font-weight: 700; text-shadow: 0 6px 18px rgba(0,0,0,.4); }
+        .subtitle { color: rgba(255,255,255,.9); margin-top: 6px; font-style: italic }
+
+        .container { position: relative; z-index: 5; width: 100%; max-width: 1200px; margin: 30px auto; padding: 0 18px; display: block; }
+
+        .section { width: 100%; background: rgba(255,255,255,0.98); border-radius: 18px; padding: 28px; box-shadow: 0 18px 45px rgba(0,0,0,0.2); transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s; position: relative; overflow: hidden }
+        .section:hover { transform: translateY(-8px); box-shadow: 0 30px 70px rgba(0,0,0,0.28) }
+        .section-title { font-size: 1.6em; color: #0f5132; margin-bottom: 12px; display: flex; align-items: center; gap: 10px }
+        .section-content { color: #444; line-height: 1.5 }
+
+        .youtube-frame { width: 100%; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; border: 3px solid rgba(26,95,63,.12) }
+
+        /* Media gallery */
+        .add-media-row { display:flex; gap:12px; align-items:center }
+        .add-media-btn { flex: 1; padding: 12px 16px; border-radius: 40px; background: linear-gradient(135deg,#2d8659,#45b676); color:#fff; border:none; cursor:pointer; font-weight:700 }
+
+        .media-grid { display:grid; grid-template-columns: repeat(5,1fr); gap:20px; margin-top:0; max-height:none; overflow:visible; padding:0; }
+        .media-item { position:relative; background:linear-gradient(135deg, rgba(45,134,89,.08), rgba(135,206,235,.08)); border-radius:16px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; border:3px dashed rgba(45,134,89,.25); transition: all .3s cubic-bezier(.2,.8,.2,1); box-shadow:0 8px 20px rgba(0,0,0,.08); min-height:160px; }
+        .media-item:hover { transform: translateY(-6px) scale(1.02); box-shadow:0 16px 40px rgba(45,134,89,.2); border-color:rgba(45,134,89,.4); }
+        .media-item { touch-action: manipulation; }
+        .emoji-faller { position: fixed; top: -40px; left: 0; pointer-events: none; font-size: 1.6rem; opacity: 0.95; animation: emojiFall linear forwards; z-index: 2; text-shadow: 0 0 16px rgba(0,0,0,.2); }
+        @keyframes emojiFall { to { transform: translate3d(var(--x,0), 120vh, 0) rotate(720deg); opacity: 0; } }
+        .media-menu-sheet { position: fixed; inset: auto 0 0 0; background: rgba(12,28,40,0.98); color:#f8fafc; transform: translateY(110%); transition: transform .32s ease; z-index: 120; display:flex; flex-direction:column; gap:16px; padding:24px 18px; border-top-left-radius:22px; border-top-right-radius:22px; box-shadow:0 -18px 40px rgba(0,0,0,.45); font-family:inherit; max-height:70vh; overflow-y:auto; }
+        .media-menu-sheet.open { transform: translateY(0); }
+        .media-menu-sheet .sheet-title { font-size:1.15em; font-weight:700; margin-bottom:4px; color:#fff; }
+        .media-menu-sheet .sheet-description { color: rgba(248,250,252,0.85); line-height:1.6; font-size:0.95em; }
+        .sheet-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:12px; }
+        .sheet-btn { flex: 1 1 48%; padding: 16px 18px; border-radius:14px; border:none; cursor:pointer; font-weight:700; transition: transform .2s ease, background .2s ease; min-width:120px; font-size:1em; }
+        .sheet-btn:active { transform: scale(0.98); }
+        .sheet-btn:hover { transform: translateY(-2px); }
+        .sheet-btn.primary { background:#22c55e; color:#fff; box-shadow: 0 4px 12px rgba(34,197,94,.3); }
+        .sheet-btn.primary:active { background:#16a34a; }
+        .sheet-btn.danger { background:#ef4444; color:#fff; box-shadow: 0 4px 12px rgba(239,68,68,.3); }
+        .sheet-btn.danger:active { background:#dc2626; }
+        .sheet-btn.secondary { background:rgba(255,255,255,.15); color:#fff; }
+        .sheet-btn.secondary:active { background:rgba(255,255,255,.25); }
+        .sheet-btn.full { flex:1 1 100%; }
+        @media (max-width:600px) {
+            .media-menu-sheet { padding:20px 16px; gap:14px; }
+            .sheet-btn { padding: 14px 16px; font-size:0.95em; }
+        }
+        .media-item img, .media-item video { width:100%; height:100%; object-fit:cover }
+
+        .slot-controls { position:absolute; top:8px; right:8px; display:flex; gap:6px; z-index:5 }
+        .btn-small { background: rgba(0,0,0,0.5); color:#fff; border:none; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:0.9em }
+
+        /* Modal viewer */
+        .viewer { position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:99; flex-direction:column; opacity:0; transition:opacity 0.3s ease; }
+        .viewer.open { display:flex; opacity:1; z-index:101; }
+        .viewer-header { position:absolute; top:20px; right:20px; display:flex; gap:10px; z-index:10; }
+        .viewer-content { max-width:90vw; max-height:75vh; border-radius:12px; overflow:hidden; background:#000; box-shadow:0 30px 80px rgba(0,0,0,.8); position:relative; animation: zoomIn 0.3s ease; }
+        @keyframes zoomIn { from { transform: scale(0.95); opacity:0; } to { transform: scale(1); opacity:1; } }
+        .viewer-content img, .viewer-content video { display:block; max-width:100%; max-height:100%; }
+        .viewer-close { background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4); color:#fff; padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:700; transition: all 0.3s; font-size:1.05em; }
+        .viewer-close:hover { background:rgba(255,255,255,0.25); }
+        .viewer-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.2); border:none; color:#fff; padding:16px 20px; cursor:pointer; font-size:1.8em; font-weight:700; transition: all 0.3s; border-radius:8px; z-index:10; }
+        .viewer-nav:hover { background:rgba(255,255,255,0.35); }
+        .viewer-prev { left:20px; }
+        .viewer-next { right:20px; }
+        .viewer-info { position:absolute; bottom:20px; left:20px; right:20px; background:rgba(0,0,0,0.7); color:#fff; padding:16px 20px; border-radius:10px; font-size:0.95em; display:flex; justify-content:space-between; align-items:center; }
+        .viewer-thumbnails { display:flex; gap:8px; margin-top:20px; justify-content:center; flex-wrap:wrap; max-width:90vw; }
+        .viewer-thumb { width:60px; height:60px; border-radius:8px; overflow:hidden; cursor:pointer; border:3px solid transparent; transition: all 0.3s; opacity:0.7; }
+        .viewer-thumb.active { border-color:#fff; opacity:1; }
+        .viewer-thumb:hover { opacity:1; transform:scale(1.1); }
+        .viewer-thumb img, .viewer-thumb video { width:100%; height:100%; object-fit:cover; }
+
+        @media (max-width:1200px) {
+            .media-grid { grid-template-columns: repeat(4,1fr); }
+        }
+        @media (max-width:900px) {
+            .media-grid { grid-template-columns: repeat(3,1fr); }
+        }
+        @media (max-width:700px) {
+            .media-grid { grid-template-columns: repeat(2,1fr); gap:14px; }
+            .add-media-row { flex-direction: column; align-items: stretch; }
+            .add-media-btn { width: 100%; }
+            .container { padding: 0 10px; }
+            header { padding: 32px 12px; }
+            .section { padding: 22px; }
+        }
+        @media (max-width:600px) {
+            .media-grid { grid-template-columns: 1fr; gap:12px; }
+            .welcome-message { font-size: 1.4em; }
+            .viewer-nav { padding: 16px 18px; font-size: 1.8em; }
+            .viewer-content { max-height: 65vh; }
+            .viewer-close { padding: 12px 18px; font-size: 1.1em; position: fixed; top: 16px; right: 16px; z-index: 102; }
+            .viewer-info { font-size: 0.9em; padding: 12px 16px; }
+        }
+    </style>
+    </head>
+<body>
+    <div class="background-animation" id="bgAnimation"></div>
+
+    <header>
+        <h1 class="welcome-message">🌍 Bine ati venit la proiectul elevilor din Elie Radu Ploiesti 🌍</h1>
+        <p class="subtitle">Energia Regenerabilă și Inovație</p>
+    </header>
+
+    <!-- YouTube Presentation Section -->
+    <section style="padding:40px 20px; background:rgba(0,0,0,0.02);">
+        <div style="max-width:1200px; margin:0 auto;">
+            <h2 style="font-size:1.8em; font-weight:700; color:#f5f5f5; text-shadow: 0 2px 8px rgba(18,78,89,0.6); margin-bottom:20px; text-align:center;">📺 Prezentare Video</h2>
+            <div style="width:100%; max-width:900px; margin:0 auto; aspect-ratio:16/9; border-radius:16px; overflow:hidden; box-shadow:0 12px 32px rgba(0,0,0,0.15); border:1px solid rgba(18,78,89,0.12);">
+                <iframe src="https://www.youtube.com/embed/IzBCwgHL9gk" title="Proiect Energie Regenerabilă" style="width:100%; height:100%; border:none;" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart City Presentation -->
+    <section style="position:relative; overflow:hidden; padding:40px 20px; text-align:center; background: linear-gradient(to bottom, rgba(16,229,16,0.1), rgba(255,255,255,0), rgba(135,206,235,0.1));">
+        <div style="position:absolute; inset:0; opacity:0.15; background:radial-gradient(circle at top, rgba(74,222,128,1), transparent 50%);"></div>
+        <div style="position:relative; z-index:10; max-width:90%; margin:0 auto;">
+            <h1 style="font-size:3.5em; font-weight:900; margin-bottom:24px; color:#f0f9ff; text-shadow:0 3px 12px rgba(18,78,89,0.7);">Smart City</h1>
+            <p style="font-size:1.3em; max-width:1000px; margin:0 auto 30px; line-height:1.8; color:#f5f5f5; text-shadow:0 2px 8px rgba(18,78,89,0.6);">
+                Un oraș modern care folosește energia verde pentru a proteja natura, a reduce poluarea și a crea un viitor mai curat pentru generațiile viitoare.
+            </p>
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:40px;">
+                <div style="background:rgba(255,255,255,0.8); backdrop-filter:blur(12px); border-radius:16px; padding:16px 24px; box-shadow:0 8px 16px rgba(0,0,0,0.1); border:1px solid rgba(18,78,89,0.2); font-size:1.05em;">🌬️ Energie Eoliană</div>
+                <div style="background:rgba(255,255,255,0.8); backdrop-filter:blur(12px); border-radius:16px; padding:16px 24px; box-shadow:0 8px 16px rgba(0,0,0,0.1); border:1px solid rgba(234,179,8,0.2); font-size:1.05em;">☀️ Panouri Fotovoltaice</div>
+                <div style="background:rgba(255,255,255,0.8); backdrop-filter:blur(12px); border-radius:16px; padding:16px 24px; box-shadow:0 8px 16px rgba(0,0,0,0.1); border:1px solid rgba(59,130,246,0.2); font-size:1.05em;">🌱 Protejarea Naturii</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Project -->
+    <section style="padding:40px 20px; background:linear-gradient(to bottom, transparent, rgba(255,255,255,0.5));">
+        <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;">
+            <div style="background:#fff; border-radius:24px; box-shadow:0 16px 32px rgba(0,0,0,0.12); padding:32px; border:1px solid rgba(18,78,89,0.1);">
+                <h2 style="font-size:1.9em; font-weight:700; color:#134e68; margin-bottom:16px;">Despre proiect</h2>
+                <p style="font-size:1.05em; line-height:1.7; margin-bottom:16px; color:#555;">
+                    Proiectul nostru prezintă un oraș inteligent care funcționează pe bază de energie regenerabilă produsă de turbine eoliene și panouri fotovoltaice.
+                </p>
+                <p style="font-size:1.05em; line-height:1.7; margin-bottom:16px; color:#555;">
+                    Scopul principal este reducerea emisiilor de carbon și crearea unui mediu mai sănătos pentru oameni și natură.
+                </p>
+                <p style="font-size:1.05em; line-height:1.7; color:#555;">
+                    În acest oraș, energia verde alimentează locuințele, iluminatul public și sistemele moderne de transport.
+                </p>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div style="background:#0f4f62; color:#fff; border-radius:24px; padding:24px; box-shadow:0 12px 24px rgba(0,0,0,0.15); display:flex; flex-direction:column; justify-content:center; align-items:center; height:180px; cursor:pointer; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:3em; margin-bottom:8px;">🌳</div>
+                    <h3 style="font-weight:700; font-size:1.05em; text-align:center;">Aer mai curat</h3>
+                </div>
+                <div style="background:#3b82f6; color:#fff; border-radius:24px; padding:24px; box-shadow:0 12px 24px rgba(0,0,0,0.15); display:flex; flex-direction:column; justify-content:center; align-items:center; height:180px; margin-top:40px; cursor:pointer; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:3em; margin-bottom:8px;">💧</div>
+                    <h3 style="font-weight:700; font-size:1.05em; text-align:center;">Protejarea mediului</h3>
+                </div>
+                <div style="background:#eab308; color:#000; border-radius:24px; padding:24px; box-shadow:0 12px 24px rgba(0,0,0,0.15); display:flex; flex-direction:column; justify-content:center; align-items:center; height:180px; cursor:pointer; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:3em; margin-bottom:8px;">☀️</div>
+                    <h3 style="font-weight:700; font-size:1.05em; text-align:center;">Energie solară</h3>
+                </div>
+                <div style="background:#206276; color:#fff; border-radius:24px; padding:24px; box-shadow:0 12px 24px rgba(0,0,0,0.15); display:flex; flex-direction:column; justify-content:center; align-items:center; height:180px; margin-top:40px; cursor:pointer; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:3em; margin-bottom:8px;">🌬️</div>
+                    <h3 style="font-weight:700; font-size:1.05em; text-align:center;">Energie eoliană</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Poem Section -->
+    <section style="padding:60px 20px; background:linear-gradient(to right, rgb(22,163,74), rgb(16,185,129)); color:#fff;">
+        <div style="max-width:1000px; margin:0 auto; text-align:center;">
+            <h2 style="font-size:2.2em; font-weight:700; margin-bottom:40px;">Poemul orașului verde</h2>
+            <div style="background:rgba(255,255,255,0.1); backdrop-filter:blur(12px); border-radius:24px; padding:40px; box-shadow:0 25px 50px rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.2);">
+                <p style="font-size:1.1em; line-height:2; font-style:italic; letter-spacing:0.5px;">
+                    Sub cer senin și câmp deschis,<br/>
+                    Un oraș nou a fost promis.<br/>
+                    Cu vânt și soare luminând,<br/>
+                    Un viitor curat formând.<br/><br/>
+                    Turbinele dansează-n zori,<br/>
+                    Iar razele aduc culori.<br/>
+                    Natura iarăși poate respira,<br/>
+                    În lumea noastră, mai bună, cândva.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section style="padding:40px 20px;">
+        <div style="max-width:1200px; margin:0 auto;">
+            <h2 style="font-size:2em; font-weight:700; text-align:center; color:#134e68; margin-bottom:48px;">Beneficiile orașului inteligent</h2>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:32px;">
+                <div style="background:#fff; border-radius:24px; box-shadow:0 12px 32px rgba(0,0,0,0.1); padding:32px; border:1px solid rgba(18,78,89,0.1); cursor:pointer; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:2.8em; margin-bottom:16px;">♻️</div>
+                    <h3 style="font-size:1.4em; font-weight:700; margin-bottom:12px; color:#134e68;">Reducerea poluării</h3>
+                    <p style="font-size:1em; line-height:1.6; color:#666;">Energia regenerabilă reduce emisiile și ajută la protejarea mediului.</p>
+                </div>
+                <div style="background:#fff; border-radius:24px; box-shadow:0 12px 32px rgba(0,0,0,0.1); padding:32px; border:1px solid rgba(59,130,246,0.1); cursor:pointer; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:2.8em; margin-bottom:16px;">⚡</div>
+                    <h3 style="font-size:1.4em; font-weight:700; margin-bottom:12px; color:#1e40af;">Energie sustenabilă</h3>
+                    <p style="font-size:1em; line-height:1.6; color:#666;">Soarele și vântul oferă surse de energie curate și inepuizabile.</p>
+                </div>
+                <div style="background:#fff; border-radius:24px; box-shadow:0 12px 32px rgba(0,0,0,0.1); padding:32px; border:1px solid rgba(234,179,8,0.1); cursor:pointer; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:2.8em; margin-bottom:16px;">🏙️</div>
+                    <h3 style="font-size:1.4em; font-weight:700; margin-bottom:12px; color:#b45309;">Viitor modern</h3>
+                    <p style="font-size:1em; line-height:1.6; color:#666;">Tehnologia inteligentă ajută orașului să funcționeze eficient și ecologic.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media Gallery Section -->
+<section style="padding:60px 20px; background:linear-gradient(135deg, rgba(18,78,89,0.08), rgba(135,206,235,0.08));">
+<div style="max-width:1400px; margin:0 auto;">
+<div style="text-align:center; margin-bottom:50px;">
+<h2 style="font-size:2.4em; font-weight:900; color:#134e68; margin-bottom:12px;">📸 Poze și Videoclipuri cu Macheta</h2>
+</div>
+<div class="media-grid">
+<div class="media-item"><img src="media1.jpeg" alt="media"></div>
+<div class="media-item"><img src="media2.jpeg" alt="media"></div>
+<div class="media-item"><img src="media3.jpeg" alt="media"></div>
+<div class="media-item"><img src="media4.jpeg" alt="media"></div>
+<div class="media-item"><img src="media5.jpeg" alt="media"></div>
+<div class="media-item"><img src="media6.jpeg" alt="media"></div>
+<div class="media-item"><video controls preload="metadata"><source src="media7.mp4" type="video/mp4"></video></div>
+<div class="media-item"><video controls preload="metadata"><source src="media8.mp4" type="video/mp4"></video></div>
+<div class="media-item"><video controls preload="metadata"><source src="media9.mp4" type="video/mp4"></video></div>
+<div class="media-item"><video controls preload="metadata"><source src="media10.mp4" type="video/mp4"></video></div>
+
+</div></div></section>
+
+<script>
+function playClickSound(){}
+function createBackgroundAnimation(){ const c=document.getElementById("bgAnimation"); if(c) c.innerHTML=""; }
+window.addEventListener("load", ()=>createBackgroundAnimation());
+</script>
+</body></html>
