@@ -186,13 +186,11 @@
             .viewer-info { font-size: 0.9em; padding: 12px 16px; }
         }
     
-        /* Galerie fixă cu fișiere în folderul /media */
+        /* Galerie fixă: media este în folderul media/ */
         #addBtn, #clearAllBtn, #fileInput, .slot-controls, #menuDeleteBtn {
             display: none !important;
         }
-        .media-item video {
-            background: #000;
-        }
+        .media-item video { background: #000; }
 
     </style>
     </head>
@@ -337,7 +335,7 @@
         <div style="max-width:1400px; margin:0 auto;">
             <div style="text-align:center; margin-bottom:50px;">
                 <h2 style="font-size:2.4em; font-weight:900; color:#134e68; margin-bottom:12px;">📸 Poze și Videoclipuri cu Macheta</h2>
-                <p style="font-size:1.1em; color:#08321f; max-width:800px; margin:0 auto;">Galerie cu fotografiile și videoclipurile machetei proiectului</p>
+                <p style="font-size:1.1em; color:#08321f; max-width:800px; margin:0 auto;">Galerie cu pozele și videoclipurile machetei proiectului</p>
             </div>
 
             <div style="display:flex; gap:16px; margin-bottom:40px; justify-content:center;">
@@ -1106,7 +1104,7 @@
         });
     
 
-        // === GALERIE FIXĂ: poze/video din folderul media ===
+        // === GALERIE FIXĂ CU FIȘIERELE DIN FOLDERUL media/ ===
         const STATIC_MEDIA_ITEMS = [
 { slot: 0, type: 'image/jpeg', blob: 'media/media_01.jpg' },
 { slot: 1, type: 'image/jpeg', blob: 'media/media_02.jpg' },
@@ -1123,9 +1121,7 @@
         loadSlots = async function() {
             const slots = Array(MAX_SLOTS).fill(null);
             STATIC_MEDIA_ITEMS.forEach(item => {
-                if (item.slot >= 0 && item.slot < MAX_SLOTS) {
-                    slots[item.slot] = item;
-                }
+                if (item.slot >= 0 && item.slot < MAX_SLOTS) slots[item.slot] = item;
             });
             return slots;
         };
@@ -1135,15 +1131,15 @@
         };
 
         saveItem = async function() {
-            alert("Galeria este fixă. Pentru a schimba pozele, modifică fișierele din GitHub.");
+            alert("Galeria este fixă. Pozele sunt deja puse în site.");
         };
 
         deleteItem = async function() {
-            alert("Galeria este fixă. Nu poate fi ștearsă de pe site de vizitatori.");
+            alert("Vizitatorii nu pot șterge pozele din site.");
         };
 
         clearAllItems = async function() {
-            alert("Galeria este fixă. Nu poate fi ștearsă de pe site de vizitatori.");
+            alert("Vizitatorii nu pot șterge galeria din site.");
         };
 
 </script>
