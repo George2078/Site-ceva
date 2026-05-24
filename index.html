@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proiect Liceul Elie Radu - Energia Regenerabilă</title>
     <style>
+        :root{ --brand-dark:#08321f; --brand:#0f5132; --accent:#22c55e; --muted:#666; --glass: rgba(255,255,255,0.9); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -114,6 +115,21 @@
         .info-modal-subtitle { display:flex; align-items:center; gap:12px; font-size: 1.1em; margin-bottom: 18px; color: #1e3a52; font-weight: 700; }
         .info-modal-copy { font-size: 1em; color: #2f3d46; line-height: 1.75; }
 
+        /* Button ripple effect */
+        .ripple-wrap{ position:relative; overflow:hidden; }
+        .ripple{ position:absolute; border-radius:50%; background: rgba(255,255,255,0.35); transform: scale(0); animation: ripple 600ms ease-out; pointer-events:none; }
+        @keyframes ripple { to { transform: scale(2.5); opacity:0; } }
+
+        /* Info-card subtle icon animation */
+        .info-card > div:first-child { display:inline-block; transition: transform .6s cubic-bezier(.2,.9,.3,1); }
+        .info-card:hover > div:first-child { transform: translateY(-8px) rotate(-8deg) scale(1.06); }
+
+        /* Pause background animation */
+        .background-animation.paused { display:none; }
+
+        /* Confetti canvas sits above background but below UI */
+        #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+
         .quiz-section { background: rgba(255,255,255,0.92); border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.12); padding: 32px; margin-bottom: 40px; }
         .quiz-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
         .quiz-header h2 { font-size: 2em; color: #134e68; margin: 0; }
@@ -159,6 +175,7 @@
     </head>
 <body>
     <div class="background-animation" id="bgAnimation"></div>
+    <canvas id="confettiCanvas"></canvas>
 
     <header class="parallax-group">
         <div class="hero-content parallax-layer" data-speed="0.18">
@@ -296,7 +313,7 @@
         <div style="max-width:1400px; margin:0 auto;">
             <div style="text-align:center; margin-bottom:50px;">
                 <h2 style="font-size:2.4em; font-weight:900; color:#134e68; margin-bottom:12px;">📸 Poze și Videoclipuri cu Macheta</h2>
-                <p style="font-size:1.1em; color:#666; max-width:800px; margin:0 auto;">Adaugă și păstrează fotografiile și videoclipurile cu macheta proiectului (10 sloturi disponibile)</p>
+                <p style="font-size:1.1em; color:#08321f; max-width:800px; margin:0 auto;">Adaugă și păstrează fotografiile și videoclipurile cu macheta proiectului (10 sloturi disponibile)</p>
             </div>
 
             <div style="display:flex; gap:16px; margin-bottom:40px; justify-content:center;">
@@ -877,6 +894,7 @@
                 quizScoreCount += 1;
                 quizFeedbackEl.textContent = current.feedback;
                 playResultSound(true);
+                try{ spawnSparkle(); }catch(e){}
             } else {
                 button.classList.add('wrong');
                 quizFeedbackEl.textContent = `Greșit! ${current.feedback}`;
@@ -907,11 +925,53 @@
             }
         }
 
+        // small sparkle spawn for correct answers
+        function spawnSparkle() {
+            const container = document.getElementById('bgAnimation') || document.body;
+            const spark = document.createElement('div');
+            spark.className = 'sparkle';
+            spark.style.left = `${50 + (Math.random()*40-20)}%`;
+            spark.style.top = `${20 + Math.random()*20}%`;
+            const size = Math.random()*12+8;
+            spark.style.width = `${size}px`;
+            spark.style.height = `${size}px`;
+            spark.style.animationDuration = `${Math.random()*1+0.8}s`;
+            container.appendChild(spark);
+            spark.addEventListener('animationend', ()=> spark.remove());
+        }
+
+        // simple confetti canvas
+        function spawnConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w = canvas.width = window.innerWidth;
+            let h = canvas.height = window.innerHeight;
+            const pieces = [];
+            for (let i=0;i<120;i++) pieces.push({ x: Math.random()*w, y: Math.random()*-h, w: 6 + Math.random()*10, h: 8 + Math.random()*12, vx: -2 + Math.random()*4, vy: 2 + Math.random()*4, color: `hsl(${Math.random()*360},80%,60%)`, rot: Math.random()*360, vr: -6 + Math.random()*12 });
+            let t = 0;
+            function draw(){
+                ctx.clearRect(0,0,w,h);
+                for (const p of pieces){
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.rot += p.vr;
+                    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI/180);
+                    ctx.fillStyle = p.color; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+                    ctx.restore();
+                }
+                t += 1;
+                if (t < 300) requestAnimationFrame(draw);
+                else ctx.clearRect(0,0,w,h);
+            }
+            requestAnimationFrame(draw);
+            window.addEventListener('resize', ()=>{ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
+        }
+
         function showFinalResults() {
             quizQuestionEl.textContent = `Felicitări! Ai terminat quiz-ul 🎉🎂`;
             quizOptionsEl.innerHTML = '';
             quizFeedbackEl.textContent = `Scor final: ${quizScoreCount}/${quizQuestions.length} — Felicitări pentru participare!`;
             spawnCelebration();
+            try{ spawnConfetti(); }catch(e){}
             quizStartBtn.textContent = 'Repornește Quiz';
             quizNextBtn.style.display = 'none';
         }
@@ -941,6 +1001,28 @@
 
         window.addEventListener('load', async ()=>{ try { await openDatabase(); } catch (error) { alert('Galeria nu poate fi salvată local, deoarece browserul nu acceptă IndexedDB.'); }
             createBackgroundAnimation(); buildGrid(); setTimeout(()=>playClickSound(),400);
+        });
+
+        // ripple effect for interactive buttons
+        document.addEventListener('click', function(e){
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            if (!btn.classList.contains('ripple-wrap')) btn.classList.add('ripple-wrap');
+            const rect = btn.getBoundingClientRect();
+            const r = document.createElement('span');
+            r.className = 'ripple';
+            const size = Math.max(rect.width, rect.height) * 1.2;
+            r.style.width = r.style.height = size + 'px';
+            r.style.left = (e.clientX - rect.left - size/2) + 'px';
+            r.style.top = (e.clientY - rect.top - size/2) + 'px';
+            btn.appendChild(r);
+            r.addEventListener('animationend', ()=> r.remove());
+        });
+
+        // keyboard shortcuts: Space to start quiz, 'b' to toggle background
+        document.addEventListener('keydown', (e)=>{
+            if (e.code === 'Space') { e.preventDefault(); startQuiz(); playClickSound(); }
+            else if (e.key === 'b' || e.key === 'B') { document.getElementById('bgAnimation').classList.toggle('paused'); }
         });
 
         document.addEventListener('mousemove', (e)=>{ const header = document.querySelector('header'); const x = (e.clientX / window.innerWidth - 0.5) * 8; const y = (e.clientY / window.innerHeight - 0.5) * 6; header.style.transform = `translate(${x}px, ${y}px)`; });
