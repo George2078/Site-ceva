@@ -192,6 +192,15 @@
             .viewer-close { padding: 12px 18px; font-size: 1.1em; position: fixed; top: 16px; right: 16px; z-index: 102; }
             .viewer-info { font-size: 0.9em; padding: 12px 16px; }
         }
+            /* Disable animations and transitions on touch devices / small screens */
+            .no-animations, .no-animations * {
+                animation: none !important;
+                transition: none !important;
+                will-change: auto !important;
+            }
+            /* specifically stop background animation and large visual canvases */
+            .no-animations .background-animation { display: none !important; }
+            .no-animations #confettiCanvas { display: none !important; }
     </style>
     </head>
 <body>
@@ -589,7 +598,7 @@
             { question: 'Ce înseamnă „sustenabil” în energie?', options: ['Folosește resurse regenerabile pe termen lung', 'Consumă resurse limitate rapid', 'Ignoră mediul'], answer: 0, feedback: 'Corect — sustenabil înseamnă folosirea resurselor regenerabile responsabil.' },
             { question: 'Cum ajută tehnologia la transportul urban?', options: ['Optimizează rutele și reduce aglomerația', 'Îngreunează traficul', 'Mărește consumul de combustibil'], answer: 0, feedback: 'Bine — sisteme inteligente pot fluidiza traficul și reduce emisii.' },
             { question: 'Ce măsură reduce imediat emisiile din traficul urban?', options: ['Transport public și biciclete', 'Mai multe mașini personale', 'Mai mulți semafoare'], answer: 0, feedback: 'Corect — transportul public și mersul pe bicicletă reduc multe emisii.' }
-        ];
+        ].slice(0, 10);
 
         let quizIndex = 0;
         let quizScoreCount = 0;
@@ -775,6 +784,7 @@
         }
 
         function showFinalResults() {
+            updateQuizScore();
             quizQuestionEl.textContent = `Felicitări! Ai terminat quiz-ul 🎉🎂`;
             quizOptionsEl.innerHTML = '';
             quizFeedbackEl.textContent = `Scor final: ${quizScoreCount}/${quizQuestions.length} — Felicitări pentru participare!`;
@@ -808,6 +818,16 @@
         });
 
         window.addEventListener('load', ()=>{ setGalleryPerformanceHints(); createBackgroundAnimation(); setTimeout(()=>playClickSound(),400); });
+
+        // Disable animations on touch devices / small screens to improve performance
+        (function(){
+            const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.matchMedia('(pointer:coarse)').matches || window.innerWidth <= 700;
+            if (isTouch) {
+                document.documentElement.classList.add('no-animations');
+                try { const bg = document.getElementById('bgAnimation'); if (bg) bg.classList.add('paused'); } catch(e){}
+                try { const conf = document.getElementById('confettiCanvas'); if (conf) conf.style.display = 'none'; } catch(e){}
+            }
+        })();
 
         // ripple effect for interactive buttons
         document.addEventListener('click', function(e){
