@@ -330,7 +330,7 @@
     </section>
 
     <!-- Media Gallery Section -->
-    <section style="padding:60px 20px; background:linear-gradient(135deg, rgba(18,78,89,0.08), rgba(135,206,235,0.08));">
+    <section id="mediaGallery" style="padding:60px 20px; background:linear-gradient(135deg, rgba(18,78,89,0.08), rgba(135,206,235,0.08));">
         <div style="max-width:1200px; margin:0 auto;">
             <div style="text-align:center; margin-bottom:50px;">
                 <h2 style="font-size:2.4em; font-weight:900; color:#134e68; margin-bottom:12px;">📸 Galerie media</h2>
@@ -381,7 +381,9 @@
     </section>
 
     <div class="media-overlay" id="mediaOverlay">
+        <button class="viewer-nav viewer-prev" id="overlayPrev" aria-label="Previous">‹</button>
         <div class="media-overlay-content" id="overlayContent"></div>
+        <button class="viewer-nav viewer-next" id="overlayNext" aria-label="Next">›</button>
         <button class="overlay-close" id="overlayClose">Închide</button>
     </div>
 
@@ -406,14 +408,28 @@
         }
 
         let overlaySourceOriginal = null;
-        function openOverlay(element) {
+        let pausedOriginals = [];
+        let galleryElements = [];
+        let currentOverlayIndex = -1;
+
+        const overlayPrev = document.getElementById('overlayPrev');
+        const overlayNext = document.getElementById('overlayNext');
+
+        function collectGalleryElements() {
+            return Array.from(document.querySelectorAll('#mediaGallery img, #mediaGallery video'));
+        }
+
+        function displayMediaElement(element) {
             overlayContent.innerHTML = '';
             const cloned = element.cloneNode(true);
             cloned.style.cursor = 'auto';
+
             if (element.tagName === 'VIDEO') {
-                element.pause();
+                try { element.pause(); } catch(e){}
+                if (!pausedOriginals.includes(element)) pausedOriginals.push(element);
                 overlaySourceOriginal = element;
             }
+
             if (cloned.tagName === 'VIDEO') {
                 cloned.removeAttribute('onclick');
                 cloned.controls = true;
@@ -433,9 +449,31 @@
                 cloned.style.maxWidth = 'calc(100% - 48px)';
                 cloned.style.maxHeight = 'calc(96vh - 48px)';
             }
+
             overlayContent.appendChild(cloned);
+        }
+
+        function openOverlay(element) {
+            galleryElements = collectGalleryElements();
+            currentOverlayIndex = galleryElements.indexOf(element);
+            if (currentOverlayIndex === -1) {
+                // fallback: find by src
+                galleryElements = collectGalleryElements();
+                currentOverlayIndex = galleryElements.findIndex(e => e === element);
+            }
+            displayMediaElement(element);
             document.body.style.overflow = 'hidden';
             overlay.classList.add('open');
+        }
+
+        function showOverlayIndex(idx) {
+            if (!galleryElements || galleryElements.length === 0) galleryElements = collectGalleryElements();
+            const len = galleryElements.length;
+            if (len === 0) return;
+            currentOverlayIndex = ((idx % len) + len) % len;
+            const el = galleryElements[currentOverlayIndex];
+            if (!el) return;
+            displayMediaElement(el);
         }
 
         function closeOverlay() {
@@ -444,15 +482,29 @@
             overlay.classList.remove('open');
             overlayContent.innerHTML = '';
             document.body.style.overflow = '';
-            if (overlaySourceOriginal && overlaySourceOriginal.tagName === 'VIDEO') {
-                try { overlaySourceOriginal.play(); } catch(e) { /* ignore play errors */ }
-                overlaySourceOriginal = null;
-            }
+            // resume any originals that we paused
+            pausedOriginals.forEach(orig => {
+                try { if (orig && orig.tagName === 'VIDEO') orig.play(); } catch(e) {}
+            });
+            pausedOriginals = [];
+            overlaySourceOriginal = null;
+            galleryElements = [];
+            currentOverlayIndex = -1;
         }
 
         overlayClose.addEventListener('click', closeOverlay);
         overlay.addEventListener('click', (event) => {
             if (event.target === overlay) closeOverlay();
+        });
+
+        overlayPrev.addEventListener('click', (e) => { e.stopPropagation(); showOverlayIndex(currentOverlayIndex - 1); });
+        overlayNext.addEventListener('click', (e) => { e.stopPropagation(); showOverlayIndex(currentOverlayIndex + 1); });
+
+        document.addEventListener('keydown', (e) => {
+            if (!overlay.classList.contains('open')) return;
+            if (e.key === 'ArrowLeft') { e.preventDefault(); showOverlayIndex(currentOverlayIndex - 1); }
+            else if (e.key === 'ArrowRight') { e.preventDefault(); showOverlayIndex(currentOverlayIndex + 1); }
+            else if (e.key === 'Escape') { closeOverlay(); }
         });
 
         const infoModal = document.getElementById('infoModal');
