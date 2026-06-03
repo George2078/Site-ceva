@@ -323,47 +323,48 @@
 
     <!-- Media Gallery Section -->
     <section style="padding:60px 20px; background:linear-gradient(135deg, rgba(18,78,89,0.08), rgba(135,206,235,0.08));">
-        <div style="max-width:1400px; margin:0 auto;">
+        <div style="max-width:1200px; margin:0 auto;">
             <div style="text-align:center; margin-bottom:50px;">
-                <h2 style="font-size:2.4em; font-weight:900; color:#134e68; margin-bottom:12px;">📸 Poze și Videoclipuri cu Macheta</h2>
-                <p style="font-size:1.1em; color:#08321f; max-width:800px; margin:0 auto;">Adaugă și păstrează fotografiile și videoclipurile cu macheta proiectului (10 sloturi disponibile)</p>
+                <h2 style="font-size:2.4em; font-weight:900; color:#134e68; margin-bottom:12px;">📸 Galerie media</h2>
+                <p style="font-size:1.1em; color:#08321f; max-width:800px; margin:0 auto;">Imagini și videoclipuri din proiect, afișate direct pe pagină într-un format responsive.</p>
             </div>
-
-            <div style="display:flex; gap:16px; margin-bottom:40px; justify-content:center;">
-                <button class="add-media-btn" id="addBtn" style="flex:0 0 auto; padding:16px 32px; font-size:1.05em;">➕ Adaugă Poze/Videoclipuri</button>
-                <button class="add-media-btn" id="clearAllBtn" style="flex:0 0 auto; padding:16px 32px; font-size:1.05em; background:#c34b4b;">🗑️ Șterge Tot</button>
-            </div>
-
-            <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:20px; padding:30px; background:rgba(255,255,255,0.7); border-radius:24px; box-shadow:0 12px 40px rgba(0,0,0,0.08);">
-                <div class="media-grid" id="mediaGrid" style="grid-column:1/-1; display:grid; grid-template-columns:repeat(5,1fr); gap:20px; max-height:none; overflow:visible;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
+                <div style="background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <img src="poze/poza3.jpeg" alt="Imagine proiect 1" style="width:100%; height:100%; object-fit:cover; display:block;">
+                </div>
+                <div style="background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <img src="poze/poza4.jpeg" alt="Imagine proiect 2" style="width:100%; height:100%; object-fit:cover; display:block;">
+                </div>
+                <div style="background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <img src="poze/poza5.jpeg" alt="Imagine proiect 3" style="width:100%; height:100%; object-fit:cover; display:block;">
+                </div>
+                <div style="background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <img src="poze/poza6.jpeg" alt="Imagine proiect 4" style="width:100%; height:100%; object-fit:cover; display:block;">
+                </div>
+                <div style="background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <img src="poze/poza7.jpeg" alt="Imagine proiect 5" style="width:100%; height:100%; object-fit:cover; display:block;">
+                </div>
+                <div style="background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <img src="poze/poza8.jpeg" alt="Imagine proiect 6" style="width:100%; height:100%; object-fit:cover; display:block;">
+                </div>
+                <div style="background:#fff; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <img src="poze/poza10.jpg" alt="Imagine proiect 7" style="width:100%; height:100%; object-fit:cover; display:block;">
+                </div>
+                <div style="background:#000; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <video controls playsinline style="width:100%; height:100%; object-fit:cover; display:block;" preload="metadata">
+                        <source src="poze/poza1.mp4" type="video/mp4">
+                        Browserul tău nu suportă redarea video.
+                    </video>
+                </div>
+                <div style="background:#000; border-radius:24px; overflow:hidden; box-shadow:0 16px 38px rgba(0,0,0,0.12); aspect-ratio:16/9; min-height:220px;">
+                    <video controls playsinline style="width:100%; height:100%; object-fit:cover; display:block;" preload="metadata">
+                        <source src="poze/poza2.mp4" type="video/mp4">
+                        Browserul tău nu suportă redarea video.
+                    </video>
                 </div>
             </div>
         </div>
     </section>
-
-    <input type="file" id="fileInput" accept="image/*,video/*">
-
-    <div class="media-menu-sheet" id="mediaMenu">
-        <div class="sheet-title" id="menuTitle">Media</div>
-        <div class="sheet-description" id="menuDescription">Alege o acțiune pentru imagine sau video.</div>
-        <div class="sheet-actions">
-            <button class="sheet-btn primary" id="menuViewBtn">👁️ Vizualizează</button>
-            <button class="sheet-btn danger" id="menuDeleteBtn">🗑️ Șterge</button>
-            <button class="sheet-btn secondary full" id="menuCloseBtn">Închide</button>
-        </div>
-    </div>
-
-    <div class="viewer" id="viewer">
-        <div class="viewer-header">
-            <button class="viewer-close" id="viewerClose">✕ Închide</button>
-            <button class="viewer-fullscreen" id="viewerFullscreen">⛶ Fullscreen</button>
-        </div>
-        <button class="viewer-nav viewer-prev" id="viewerPrev">❮</button>
-        <button class="viewer-nav viewer-next" id="viewerNext">❯</button>
-        <div class="viewer-content" id="viewerContent"></div>
-        <div class="viewer-info" id="viewerInfo" style="display:none;"></div>
-        <div class="viewer-thumbnails" id="viewerThumbnails"></div>
-    </div>
 
     <div class="info-modal" id="infoModal">
         <div class="info-modal-card">
@@ -375,420 +376,7 @@
     </div>
 
     <script>
-        const DB_NAME = 'ceva_gallery_db';
-        const DB_VERSION = 1;
-        const STORE_NAME = 'mediaSlots';
-        const MAX_SLOTS = 10;
-        let selectedSlot = null;
-        let currentViewingIndex = null;
-
-        // Sound
-        function playClickSound(){
-            try{
-                const ctx = new (window.AudioContext||window.webkitAudioContext)();
-                const now = ctx.currentTime;
-                const o = ctx.createOscillator(); const g = ctx.createGain();
-                o.type='sine'; o.frequency.setValueAtTime(900, now); o.frequency.exponentialRampToValueAtTime(380, now+0.25);
-                g.gain.setValueAtTime(0.25, now); g.gain.exponentialRampToValueAtTime(0.001, now+0.3);
-                o.connect(g); g.connect(ctx.destination); o.start(now); o.stop(now+0.3);
-            }catch(e){/*ignore*/}
-        }
-
-        function openDatabase(){
-            return new Promise((resolve, reject) => {
-                if (!window.indexedDB) {
-                    reject(new Error('IndexedDB not supported'));
-                    return;
-                }
-                const request = indexedDB.open(DB_NAME, DB_VERSION);
-                request.onupgradeneeded = (event) => {
-                    const db = event.target.result;
-                    if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        db.createObjectStore(STORE_NAME, { keyPath: 'slot' });
-                    }
-                };
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function runTransaction(mode, callback) {
-            return openDatabase().then(db => new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, mode);
-                const store = tx.objectStore(STORE_NAME);
-                callback(store, resolve, reject);
-                tx.oncomplete = () => db.close();
-                tx.onerror = () => reject(tx.error);
-            }));
-        }
-
-        function getAllItems(){
-            return runTransaction('readonly', (store, resolve, reject) => {
-                const request = store.getAll();
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function getItem(slot){
-            return runTransaction('readonly', (store, resolve, reject) => {
-                const request = store.get(slot);
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function saveItem(slot, item){
-            return runTransaction('readwrite', (store, resolve, reject) => {
-                const request = store.put({ slot, ...item });
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function deleteItem(slot){
-            return runTransaction('readwrite', (store, resolve, reject) => {
-                const request = store.delete(slot);
-                request.onsuccess = () => resolve();
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function clearAllItems(){
-            return runTransaction('readwrite', (store, resolve, reject) => {
-                const request = store.clear();
-                request.onsuccess = () => resolve();
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        async function loadSlots(){
-            const items = await getAllItems();
-            const slots = Array(MAX_SLOTS).fill(null);
-            items.forEach(item => {
-                if (typeof item.slot === 'number' && item.slot >= 0 && item.slot < MAX_SLOTS) {
-                    slots[item.slot] = item;
-                }
-            });
-            return slots;
-        }
-
-        function getFilledSlots(slots) {
-            return slots.map((item, i) => ({ index: i, item })).filter(x => x.item);
-        }
-
-        function createObjectUrl(blob){
-            try { return URL.createObjectURL(blob); } catch (e) { return null; }
-        }
-
-        async function buildGrid(){
-            const grid = document.getElementById('mediaGrid');
-            grid.innerHTML = '';
-            const slots = await loadSlots();
-            for (let i = 0; i < MAX_SLOTS; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'media-item';
-                cell.dataset.index = i;
-                const controls = document.createElement('div');
-                controls.className = 'slot-controls';
-                const addBtn = document.createElement('button');
-                addBtn.className = 'btn-small';
-                addBtn.title = 'Încarcă';
-                addBtn.textContent = '✚';
-                const menuBtn = document.createElement('button');
-                menuBtn.className = 'btn-small';
-                menuBtn.title = 'Opțiuni';
-                menuBtn.textContent = '⋮';
-                const delBtn = document.createElement('button');
-                delBtn.className = 'btn-small';
-                delBtn.title = 'Șterge';
-                delBtn.textContent = '✖';
-                controls.appendChild(addBtn);
-                controls.appendChild(menuBtn);
-                controls.appendChild(delBtn);
-                cell.appendChild(controls);
-
-                const slotItem = slots[i];
-                if (slotItem) {
-                    const type = slotItem.type;
-                    const url = createObjectUrl(slotItem.blob);
-                    if (type.startsWith('image/')) {
-                        const img = document.createElement('img');
-                        img.src = url;
-                        cell.appendChild(img);
-                    } else if (type.startsWith('video/')) {
-                        const v = document.createElement('video');
-                        v.src = url;
-                        v.muted = true;
-                        v.loop = true;
-                        v.playsInline = true;
-                        v.autoplay = true;
-                        cell.appendChild(v);
-                    }
-                } else {
-                    const placeholder = document.createElement('div');
-                    placeholder.style.opacity = '0.6';
-                    placeholder.textContent = 'Slot ' + (i + 1);
-                    cell.appendChild(placeholder);
-                }
-
-                cell.addEventListener('click', (e) => { 
-                    if (e.target.closest('.btn-small')) return; 
-                    if (!slotItem) return; 
-                    openViewer(i, true); 
-                    playClickSound(); 
-                });
-                menuBtn.addEventListener('click', (e) => { 
-                    e.stopPropagation(); 
-                    if (!slotItem) return; 
-                    openMediaMenu(i); 
-                    playClickSound(); 
-                });
-                addBtn.addEventListener('click', (e) => { e.stopPropagation(); selectedSlot = i; document.getElementById('fileInput').click(); playClickSound(); });
-                delBtn.addEventListener('click', (e) => { e.stopPropagation(); removeSlot(i); playClickSound(); });
-                grid.appendChild(cell);
-            }
-        }
-
-        let activeMenuIndex = null;
-        const mediaMenu = document.getElementById('mediaMenu');
-
-        async function openMediaMenu(index) {
-            const slots = await loadSlots();
-            const item = slots[index];
-            if (!item) return;
-            activeMenuIndex = index;
-            document.getElementById('menuTitle').textContent = `📱 Slot ${index + 1} - ${item.type.startsWith('image/') ? 'Imagine' : 'Video'}`;
-            document.getElementById('menuDescription').textContent = '🖱️ Dublu-click = Fullscreen rapid  •  👁️ Apasă butonul = Vizualizare';
-            mediaMenu.classList.add('open');
-        }
-
-        function closeMediaMenu() {
-            activeMenuIndex = null;
-            mediaMenu.classList.remove('open');
-        }
-
-        // Close menu when clicking outside
-        mediaMenu.addEventListener('click', (e) => {
-            if (e.target === mediaMenu) closeMediaMenu();
-        });
-
-        document.getElementById('menuViewBtn').addEventListener('click', async () => {
-            if (activeMenuIndex === null) return;
-            closeMediaMenu();
-            await openViewer(activeMenuIndex);
-            playClickSound();
-        });
-
-        document.getElementById('menuDeleteBtn').addEventListener('click', async () => {
-            if (activeMenuIndex === null) return;
-            await removeSlot(activeMenuIndex);
-            closeMediaMenu();
-            playClickSound();
-        });
-
-        document.getElementById('menuCloseBtn').addEventListener('click', () => {
-            closeMediaMenu();
-            playClickSound();
-        });
-
-        function createBackgroundAnimation(){
-            const container = document.getElementById('bgAnimation');
-            container.innerHTML = '';
-            const lineCount = 4;
-            for (let i=0;i<lineCount;i++){
-                const line = document.createElement('div');
-                line.className = 'wind-line';
-                line.style.width = `${Math.random()*35+25}vw`;
-                line.style.top = `${Math.random()*100}%`;
-                line.style.animationDuration = `${Math.random()*10+8}s`;
-                line.style.animationDelay = `${-Math.random()*10}s`;
-                container.appendChild(line);
-            }
-            const emojis = ['🌟','✨','🌿','🍃','☀️','🌈','🎋'];
-            function spawnEmoji(){
-                const emoji = document.createElement('div');
-                emoji.className = 'emoji-faller';
-                emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-                emoji.style.left = `${Math.random()*100}%`;
-                emoji.style.fontSize = `${Math.random()*18+18}px`;
-                emoji.style.animationDuration = `${Math.random()*6+6}s`;
-                emoji.style.setProperty('--x', `${(Math.random()*40-20)}vw`);
-                container.appendChild(emoji);
-                emoji.addEventListener('animationend', ()=> emoji.remove());
-            }
-            function spawnSpark(){
-                const spark = document.createElement('div');
-                spark.className = 'sparkle';
-                spark.style.left = `${Math.random()*100}%`;
-                spark.style.top = `${Math.random()*40}%`;
-                const size = Math.random()*10+6;
-                spark.style.width = `${size}px`;
-                spark.style.height = `${size}px`;
-                spark.style.animationDuration = `${Math.random()*8+6}s`;
-                container.appendChild(spark);
-                spark.addEventListener('animationend', ()=> spark.remove());
-            }
-            for (let i=0;i<5;i++) spawnEmoji();
-            for (let i=0;i<3;i++) spawnSpark();
-            setInterval(spawnEmoji, 900);
-            setInterval(spawnSpark, 1200);
-        }
-
-        async function buildThumbnails(){
-            const slots = await loadSlots();
-            const filled = getFilledSlots(slots);
-            const thumbContainer = document.getElementById('viewerThumbnails');
-            thumbContainer.innerHTML = '';
-            filled.forEach((entry, idx) => {
-                const thumb = document.createElement('div');
-                thumb.className = 'viewer-thumb';
-                if (idx === currentViewingIndex) thumb.classList.add('active');
-                const url = createObjectUrl(entry.item.blob);
-                if (entry.item.type.startsWith('image/')) {
-                    const img = document.createElement('img');
-                    img.src = url;
-                    thumb.appendChild(img);
-                } else {
-                    const v = document.createElement('video');
-                    v.src = url;
-                    v.muted = true;
-                    v.loop = true;
-                    v.playsInline = true;
-                    thumb.appendChild(v);
-                }
-                thumb.addEventListener('click', () => { currentViewingIndex = idx; updateViewer(); playClickSound(); });
-                thumbContainer.appendChild(thumb);
-            });
-        }
-
-        async function openViewer(index, requestFullScreen = false){
-            const slots = await loadSlots();
-            const filled = getFilledSlots(slots);
-            currentViewingIndex = filled.findIndex(x => x.index === index);
-            if (currentViewingIndex === -1) return;
-            await updateViewer();
-            const viewer = document.getElementById('viewer');
-            viewer.classList.add('open');
-            if (requestFullScreen && viewer.requestFullscreen) {
-                try { await viewer.requestFullscreen(); } catch (e) { /* fullscreen may be blocked */ }
-            }
-        }
-
-        async function updateViewer(){
-            const slots = await loadSlots();
-            const filled = getFilledSlots(slots);
-            if (currentViewingIndex < 0 || currentViewingIndex >= filled.length) return;
-            const entry = filled[currentViewingIndex];
-            const item = entry.item;
-            const content = document.getElementById('viewerContent');
-            content.innerHTML = '';
-            const url = createObjectUrl(item.blob);
-            if (item.type.startsWith('image/')) {
-                const img = document.createElement('img');
-                img.src = url;
-                content.appendChild(img);
-            } else {
-                const v = document.createElement('video');
-                v.src = url;
-                v.controls = true;
-                v.autoplay = true;
-                v.playsInline = true;
-                content.appendChild(v);
-            }
-            const info = document.getElementById('viewerInfo');
-            info.textContent = `${currentViewingIndex + 1} / ${filled.length}`;
-            info.style.display = 'flex';
-            await buildThumbnails();
-            document.getElementById('viewerPrev').style.display = filled.length > 1 ? 'block' : 'none';
-            document.getElementById('viewerNext').style.display = filled.length > 1 ? 'block' : 'none';
-        }
-
-        function closeViewer(){
-            const viewer = document.getElementById('viewer');
-            viewer.classList.remove('open');
-            const content = document.getElementById('viewerContent');
-            content.innerHTML = '';
-            currentViewingIndex = null;
-        }
-
-        async function removeSlot(index){
-            await deleteItem(index);
-            await buildGrid();
-        }
-
-        document.getElementById('fileInput').addEventListener('change', async function(e){
-            const file = this.files[0];
-            if (!file) return;
-            const slot = selectedSlot !== null ? selectedSlot : await findFirstEmptySlot();
-            if (slot === null) {
-                alert('Toate sloturile sunt ocupate. Ștergeți unul pentru a adăuga.');
-                this.value = '';
-                return;
-            }
-            await saveItem(slot, { type: file.type, blob: file });
-            selectedSlot = null;
-            await buildGrid();
-            playClickSound();
-            this.value = '';
-        });
-
-        async function findFirstEmptySlot(){
-            const slots = await loadSlots();
-            const idx = slots.findIndex(s => !s);
-            return idx === -1 ? null : idx;
-        }
-
-        document.getElementById('addBtn').addEventListener('click', async ()=>{
-            const idx = await findFirstEmptySlot();
-            if (idx === null) {
-                alert('Toate sloturile sunt ocupate. Ștergeți unul pentru a adăuga.');
-                return;
-            }
-            selectedSlot = idx;
-            document.getElementById('fileInput').click();
-            playClickSound();
-        });
-
-        document.getElementById('clearAllBtn').addEventListener('click', async ()=>{
-            if (confirm('Ștergeți toate elementele din galerie?')){
-                await clearAllItems();
-                await buildGrid();
-                playClickSound();
-            }
-        });
-
-        document.getElementById('viewerClose').addEventListener('click', ()=>{ closeViewer(); playClickSound(); });
-        document.getElementById('viewerFullscreen').addEventListener('click', async () => {
-            const viewer = document.getElementById('viewer');
-            if (viewer.requestFullscreen) {
-                try { await viewer.requestFullscreen(); } catch (e) { /* ignore */ }
-            }
-            playClickSound();
-        });
-        document.getElementById('viewerPrev').addEventListener('click', async ()=>{ const slots = await loadSlots(); const filled = getFilledSlots(slots); currentViewingIndex = (currentViewingIndex - 1 + filled.length) % filled.length; await updateViewer(); playClickSound(); });
-        document.getElementById('viewerNext').addEventListener('click', async ()=>{ const slots = await loadSlots(); const filled = getFilledSlots(slots); currentViewingIndex = (currentViewingIndex + 1) % filled.length; await updateViewer(); playClickSound(); });
-        
-        // Swipe to close on mobile
-        let touchStartY = 0;
-        document.getElementById('viewer').addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        });
-        document.getElementById('viewer').addEventListener('touchend', (e) => {
-            const touchEndY = e.changedTouches[0].clientY;
-            if (touchEndY - touchStartY > 100 && e.target.id === 'viewer') {
-                closeViewer();
-            }
-        });
-        
-        document.getElementById('viewer').addEventListener('click', (e)=>{ if(e.target.id==='viewer') closeViewer(); });
-
-        document.addEventListener('keydown', (e) => {
-            if (currentViewingIndex === null) return;
-            if (e.key === 'ArrowLeft') document.getElementById('viewerPrev').click();
-            else if (e.key === 'ArrowRight') document.getElementById('viewerNext').click();
-            else if (e.key === 'Escape') closeViewer();
-        });
+        window.addEventListener('load', ()=>{ createBackgroundAnimation(); setTimeout(()=>playClickSound(),400); });
 
         const infoModal = document.getElementById('infoModal');
         const infoModalTitle = document.getElementById('infoModalTitle');
@@ -1055,9 +643,7 @@
             playClickSound();
         });
 
-        window.addEventListener('load', async ()=>{ try { await openDatabase(); } catch (error) { alert('Galeria nu poate fi salvată local, deoarece browserul nu acceptă IndexedDB.'); }
-            createBackgroundAnimation(); buildGrid(); setTimeout(()=>playClickSound(),400);
-        });
+        window.addEventListener('load', ()=>{ createBackgroundAnimation(); setTimeout(()=>playClickSound(),400); });
 
         // ripple effect for interactive buttons
         document.addEventListener('click', function(e){
