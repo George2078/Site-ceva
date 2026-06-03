@@ -408,7 +408,7 @@
         }
 
         let overlaySourceOriginal = null;
-        let pausedOriginals = [];
+        let pausedOriginals = []; // array of { el: HTMLVideoElement, wasPlaying: boolean }
         let galleryElements = [];
         let currentOverlayIndex = -1;
 
@@ -425,8 +425,11 @@
             cloned.style.cursor = 'auto';
 
             if (element.tagName === 'VIDEO') {
-                try { element.pause(); } catch(e){}
-                if (!pausedOriginals.includes(element)) pausedOriginals.push(element);
+                try {
+                    const wasPlaying = !element.paused && !element.ended;
+                    if (!pausedOriginals.find(o => o.el === element)) pausedOriginals.push({ el: element, wasPlaying });
+                    element.pause();
+                } catch(e){}
                 overlaySourceOriginal = element;
             }
 
@@ -478,13 +481,25 @@
 
         function closeOverlay() {
             const videos = overlayContent.querySelectorAll('video');
-            videos.forEach(v => v.pause());
+            videos.forEach(v => {
+                try {
+                    v.pause();
+                    // Unload sources to fully stop decoding/playing and free resources
+                    v.removeAttribute('src');
+                    Array.from(v.querySelectorAll('source')).forEach(s => s.removeAttribute('src'));
+                    v.load();
+                } catch (e) {}
+            });
             overlay.classList.remove('open');
             overlayContent.innerHTML = '';
             document.body.style.overflow = '';
-            // resume any originals that we paused
-            pausedOriginals.forEach(orig => {
-                try { if (orig && orig.tagName === 'VIDEO') orig.play(); } catch(e) {}
+            // resume only originals that were playing before opening
+            pausedOriginals.forEach(obj => {
+                try {
+                    if (obj && obj.el && obj.el.tagName === 'VIDEO' && obj.wasPlaying) {
+                        obj.el.play().catch(()=>{});
+                    }
+                } catch(e) {}
             });
             pausedOriginals = [];
             overlaySourceOriginal = null;
